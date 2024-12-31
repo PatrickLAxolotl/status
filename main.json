@@ -1,0 +1,40 @@
+// Importation du module discord.js
+const { Client, GatewayIntentBits } = require('discord.js');
+
+// Création d'une instance du client
+const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+
+// Token du bot - remplacez par le vôtre
+const TOKEN = 'MTMyMTA4MTA4ODU3OTQ2OTM4NQ.GCqWwj.V04LG_3moa-MrYue5ItKraFO7oW72bjfFOP2sw';
+
+// Liste des statuts
+const statuses = [
+    'les Takys défiler',
+    'ses Messages Privés'
+];
+
+// Quand le bot est prêt
+client.once('ready', () => {
+    console.log(`Connecté en tant que ${client.user.tag}!`);
+    
+    // Index pour parcourir les statuts
+    let index = 0;
+
+    // Fonction pour changer le statut
+    const updateStatus = () => {
+        const status = statuses[index];
+        client.user.setActivity(status, { type: 'WATCHING' })
+            .then(() => console.log(`Statut défini sur : Regarde ${status}`))
+            .catch(console.error);
+        
+        // Passer au prochain statut
+        index = (index + 1) % statuses.length;
+    };
+
+    // Changer de statut toutes les 10 secondes
+    updateStatus(); // Met le premier statut immédiatement
+    setInterval(updateStatus, 10000);
+});
+
+// Connexion du bot
+client.login(TOKEN);
